@@ -61,13 +61,20 @@ class Pelota:
             self.vy *= -1
         
 
-        if self.pos_x >= x_max + self.radio * 5: #limite derecha
+        if self.pos_x >= x_max + self.radio *2: #limite derecha
+            self.contadorIzquierdo +=1
+            self.pos_x = x_max//2 #aparezca en el medio cuando se anota
+            self.pos_y = y_max//2 #tambien pueda ir desde el medio hacia arriba
             self.vx *= -1
-            self.contadorIzquierdo += 1
+            self.vy *= -1
+            
 
-        if self.pos_x < y_min - self.radio * 5 : #limite izquierdo
+        if self.pos_x < y_min - self.radio *2 : #limite izquierdo
+            self.contadorDerecho +=1
+            self.pos_x = x_max//2
+            self.pos_y = y_max//2        
             self.vx *= -1
-            self.contadorDerecho += 1
+            self.vy *= -1
 
     def mostrar_marcador(self, pantalla):
         fuente = pg.font.Font(None, 170) #inicializar texto,( nombre fuente, tamaño)
@@ -89,7 +96,7 @@ class Pelota:
     @property
     def abajo(self):
         return self.pos_y + self.radio
-    
+    ''' 
     def comprobar_choque(self, r1, r2):
         if self.derecha >= r2.izquierda and\
             self.izquierda <= r2.derecha and\
@@ -101,9 +108,12 @@ class Pelota:
             self.izquierda <= r1.derecha and\
             self.abajo >= r1.arriba and\
             self.arriba <= r1.abajo:
-                self.vx *= -1 
-    
-    
-
-
-
+                self.vx *= -1  
+    '''
+    def comprobar_choqueV2(self, *raquetas):
+        for r in raquetas:
+            if self.derecha >= r.izquierda and\
+               self.izquierda <= r.derecha and\
+               self.abajo >= r.arriba and\
+               self.arriba <= r.abajo:
+                    self.vx *= -1
