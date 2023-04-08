@@ -1,7 +1,8 @@
 import pygame as pg
+from .utils import * 
 
 class Raqueta:
-    def __init__(self, pos_x, pos_y, w = 15, h = 100, color = (255, 255, 255), vx = 1, vy = 1):
+    def __init__(self, pos_x, pos_y, w = 15, h = 100, color = BLANCO, vx = 1, vy = 1):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.w = w
@@ -13,7 +14,7 @@ class Raqueta:
     def dibujarRaqueta(self, pantalla):
         pg.draw.rect(pantalla, self.color,(self.pos_x, self.pos_y, self.w, self.h))
 
-    def moverRaqueta(self, tecla_arriba, tecla_abajo, y_max = 600, y_min = 0):
+    def moverRaqueta(self, tecla_arriba, tecla_abajo, y_max = Y_MAX, y_min = Y_MIN):
         estado_teclado = pg.key.get_pressed()
 
         if estado_teclado[tecla_arriba] == True and self.pos_y > y_min:
@@ -38,7 +39,7 @@ class Raqueta:
     
 
 class Pelota:
-    def __init__(self, pos_x, pos_y, color = (255, 255, 255), radio = 10, vx = 1, vy = 1):
+    def __init__(self, pos_x, pos_y, color = COLOR_PELOTA, radio = 10, vx = 1, vy = 1):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.color = color
@@ -52,7 +53,7 @@ class Pelota:
     def dibujarPelota(self, pantalla):
         pg.draw.circle(pantalla, self.color, (self.pos_x, self.pos_y,), self.radio)
 
-    def moverPelota(self, x_max = 800, y_max = 600, y_min = 0):
+    def moverPelota(self, x_max = X_MAX, y_max = Y_MAX, y_min = Y_MIN):
         self.pos_x += self.vx
         self.pos_y += self.vy
 
@@ -77,10 +78,9 @@ class Pelota:
             self.vy *= -1
 
     def mostrar_marcador(self, pantalla):
-        fuente = pg.font.Font(None, 170) #inicializar texto,( nombre fuente, tamaño)
-        jugador1 = fuente.render(str(self.contadorIzquierdo),True ,(255, 255, 255))
-        jugador2 = fuente.render(str(self.contadorDerecho),True , (255, 255, 255))
-
+        fuente = pg.font.Font(None, 100) #inicializar texto,( nombre fuente, tamaño)
+        jugador1 = fuente.render(str(self.contadorIzquierdo),True ,BLANCO)
+        jugador2 = fuente.render(str(self.contadorDerecho),True , BLANCO)
         pantalla.blit(jugador1, (170, 50))
         pantalla.blit(jugador2, (570, 50))
 
@@ -96,20 +96,7 @@ class Pelota:
     @property
     def abajo(self):
         return self.pos_y + self.radio
-    ''' 
-    def comprobar_choque(self, r1, r2):
-        if self.derecha >= r2.izquierda and\
-            self.izquierda <= r2.derecha and\
-            self.abajo >= r2.arriba and\
-            self.arriba <= r2.abajo:
-                self.vx *= -1 
 
-        if self.derecha >= r1.izquierda and\
-            self.izquierda <= r1.derecha and\
-            self.abajo >= r1.arriba and\
-            self.arriba <= r1.abajo:
-                self.vx *= -1  
-    '''
     def comprobar_choqueV2(self, *raquetas):
         for r in raquetas:
             if self.derecha >= r.izquierda and\

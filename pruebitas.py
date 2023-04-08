@@ -1,4 +1,4 @@
-from figura_class import Raqueta
+from pongapp.figura_class import Raqueta
 
 objetoRaqueta = Raqueta(400, 500)
 

@@ -1,5 +1,5 @@
 import pygame as pg     
-from figura_class import Pelota, Raqueta    
+from pongapp.figura_class import Pelota, Raqueta    
 
 pg.init()
 
