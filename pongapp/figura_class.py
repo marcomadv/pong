@@ -104,3 +104,4 @@ class Pelota:
                self.abajo >= r.arriba and\
                self.arriba <= r.abajo:
                     self.vx *= -1
+

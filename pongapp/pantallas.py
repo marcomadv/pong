@@ -12,13 +12,12 @@ class Partida:
         self.pelota = Pelota(ANCHO//2, ALTO//2)
         self.raqueta1 = Raqueta(0, ALTO//2)
         self.raqueta2 = Raqueta(ANCHO-15, ALTO//2)
-
         
-        self.fuente = pg.font.Font(None, 30) #inicializar texto,( nombre fuente, tamaño)
-        self.jugador1 = self.fuente.render("Player 1",True ,BLANCO)
-        self.jugador2 = self.fuente.render("Player 2",True , BLANCO)
-      
+        self.fuente = pg.font.Font(None, 30)
+        self.jugador1 = self.fuente.render("Player1",True ,COLOR_PLAYER)
+        self.jugador2 = self.fuente.render("Player2",True , COLOR_PLAYER)
 
+    
     def bucle_fotrograma(self):
         game_over = False
         while not game_over:
@@ -39,9 +38,10 @@ class Partida:
             self.pelota.dibujarPelota(self.pantalla_principal)
             self.raqueta1.dibujarRaqueta(self.pantalla_principal)
             self.raqueta2.dibujarRaqueta(self.pantalla_principal)
-
             self.pantalla_principal.blit(self.jugador1, (150, 20))
             self.pantalla_principal.blit(self.jugador2, (550, 20))
+
+            
 
             #logica de choque 
             self.pelota.comprobar_choqueV2(self.raqueta1, self.raqueta2)
