@@ -47,8 +47,7 @@ class Pelota:
         self.vx = vx
         self.vy = vy
 
-        self.contadorDerecho = 0
-        self.contadorIzquierdo = 0
+
 
     def dibujarPelota(self, pantalla):
         pg.draw.circle(pantalla, self.color, (self.pos_x, self.pos_y,), self.radio)
@@ -63,26 +62,25 @@ class Pelota:
         
 
         if self.pos_x >= x_max + self.radio *2: #limite derecha
-            self.contadorIzquierdo +=1
+            #self.contadorIzquierdo +=1
             self.pos_x = x_max//2 #aparezca en el medio cuando se anota
             self.pos_y = y_max//2 #tambien pueda ir desde el medio hacia arriba
             self.vx *= -1
             self.vy *= -1
+
+            return "left"
             
 
         if self.pos_x < y_min - self.radio *2 : #limite izquierdo
-            self.contadorDerecho +=1
+            #self.contadorDerecho +=1
             self.pos_x = x_max//2
             self.pos_y = y_max//2        
             self.vx *= -1
             self.vy *= -1
 
-    def mostrar_marcador(self, pantalla):
-        fuente = pg.font.Font(None, 100) #inicializar texto,( nombre fuente, tamaño)
-        jugador1 = fuente.render(str(self.contadorIzquierdo),True ,BLANCO)
-        jugador2 = fuente.render(str(self.contadorDerecho),True , BLANCO)
-        pantalla.blit(jugador1, (170, 50))
-        pantalla.blit(jugador2, (570, 50))
+            return "right"
+
+  
 
     @property
     def derecha(self):
