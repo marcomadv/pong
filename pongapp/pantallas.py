@@ -13,7 +13,7 @@ class Partida:
         self.raqueta1 = Raqueta(0, ALTO//2)
         self.raqueta2 = Raqueta(ANCHO-15, ALTO//2)
          
-        self.fuente = pg.font.Font(None, 30) #Inicializar fuente, con tipo de fuente y tamaño
+        self.fuente = pg.font.Font(FUENTE, 20) #Inicializar fuente, con tipo de fuente y tamaño
         
         self.contadorDerecho = 0
         self.contadorIzquierdo = 0
@@ -23,8 +23,21 @@ class Partida:
 
     def bucle_fotrograma(self):
         game_over = False
+        temporizador = 60000 #60 segundos
         while not game_over:
-            self.tasa_refresco.tick(300)
+            salto_tiempo = self.tasa_refresco.tick(300)
+            temporizador -= salto_tiempo
+            if temporizador <= 0:
+                 game_over = True
+
+            # para que finalice el juego por puntos
+            if self.contadorDerecho == 7:
+                 game_over = True
+                 print("El gandor es el jugador 2")
+            
+            if self.contadorIzquierdo == 7:
+                 game_over = True
+                 print("El ganador es el jugador 1")
 
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
@@ -58,8 +71,8 @@ class Partida:
     def mostrar_jugadores(self):
         jugador1 = self.fuente.render("Player 1",True ,COLOR_PLAYER)
         jugador2 = self.fuente.render("Player 2",True , COLOR_PLAYER)
-        self.pantalla_principal.blit(jugador1, (150, 20))
-        self.pantalla_principal.blit(jugador2, (550, 20))
+        self.pantalla_principal.blit(jugador1, (120, 20))
+        self.pantalla_principal.blit(jugador2, (520, 20))
     
     def mostrar_linea_central(self):
         cont_linea = 10
@@ -73,10 +86,10 @@ class Partida:
         elif self.quienMarco == "left":
                 self.contadorIzquierdo += 1
 
-        fuente = pg.font.Font(None, 100) #inicializar texto,( nombre fuente, tamaño)
+        fuente = pg.font.Font(FUENTE, 50) #inicializar texto,( nombre fuente, tamaño)
         jugador1 = fuente.render(str(self.contadorIzquierdo),True ,BLANCO)
         jugador2 = fuente.render(str(self.contadorDerecho),True , BLANCO)
-        self.pantalla_principal.blit(jugador1, (170, 50))
-        self.pantalla_principal.blit(jugador2, (570, 50))
+        self.pantalla_principal.blit(jugador1, (170, 55))
+        self.pantalla_principal.blit(jugador2, (570, 55))
 
            

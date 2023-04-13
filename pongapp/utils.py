@@ -9,3 +9,4 @@ Y_MIN = 0
 COLOR_CANCHA = (28, 122, 82)
 COLOR_PELOTA = (222, 252, 58)
 COLOR_PLAYER = (178, 178, 175)
+FUENTE = "pongapp/fonts/PressStart2p.ttf"
