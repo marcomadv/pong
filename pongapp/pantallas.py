@@ -20,28 +20,21 @@ class Partida:
 
         self.quienMarco = ""
 
+        self.temporizador = TIEMPO
+        self.game_over = False
+
 
     def bucle_fotrograma(self):
         game_over = False
-        temporizador = 60000 #60 segundos
-        while not game_over:
-            salto_tiempo = self.tasa_refresco.tick(300)
-            temporizador -= salto_tiempo
-            if temporizador <= 0:
-                 game_over = True
 
-            # para que finalice el juego por puntos
-            if self.contadorDerecho == 7:
-                 game_over = True
-                 print("El gandor es el jugador 2")
-            
-            if self.contadorIzquierdo == 7:
-                 game_over = True
-                 print("El ganador es el jugador 1")
+        while not self.game_over:
+            salto_tiempo = self.tasa_refresco.tick(300)
+            self.fin_de_partida()
+            self.temporizador -= salto_tiempo
 
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    game_over = True
+                    self.game_over = True
 
             self.raqueta1.moverRaqueta(pg.K_w, pg.K_s)   
             self.raqueta2.moverRaqueta(pg.K_UP, pg.K_DOWN)
@@ -53,14 +46,12 @@ class Partida:
         
             self.pelota.dibujarPelota(self.pantalla_principal)
             self.raqueta1.dibujarRaqueta(self.pantalla_principal)
-            self.raqueta2.dibujarRaqueta(self.pantalla_principal)
-
-            #logica de choque 
+            self.raqueta2.dibujarRaqueta(self.pantalla_principal)         
         
             self.pelota.comprobar_choqueV2(self.raqueta1, self.raqueta2)
-   
-            self.mostrar_marcador()
 
+            self.mostrar_marcador()
+            self.mostrar_temporizador()
             self.mostrar_jugadores()
           
 
@@ -92,4 +83,48 @@ class Partida:
         self.pantalla_principal.blit(jugador1, (170, 55))
         self.pantalla_principal.blit(jugador2, (570, 55))
 
-           
+    def mostrar_temporizador(self):
+         tiempo_juego= self.fuente.render(str(self.temporizador//1000),0,AZUL)
+         if self.temporizador <= 11000:
+              tiempo_juego= self.fuente.render(str(self.temporizador//1000),0,NARANJA)
+         if self.temporizador <= 6000:
+              tiempo_juego= self.fuente.render(str(self.temporizador//1000),0,ROJO)
+              
+         self.pantalla_principal.blit(tiempo_juego, (380, 51))
+    
+    def fin_de_partida(self):
+        if self.temporizador <= 0:
+            self.game_over = True
+
+        # para que finalice el juego por puntos
+        if self.contadorDerecho == 7:
+            self.game_over = True
+            print("El gandor es el jugador 2")
+            
+        if self.contadorIzquierdo == 7:
+            self.game_over = True
+            print("El ganador es el jugador 1")
+
+class Menu:
+    def __init__(self):
+        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
+        pg.display.set_caption("MENU")
+        self.tasa_refresco = pg.time.Clock()
+        self.imagenFondo = pg.image.load("pongapp/images/fondo.jpg")
+        self.fuenteMenu = pg.font.Font(FUENTE, 25)
+
+    def bucle_pantalla(self):
+        game_over = False
+        while not game_over:
+            for evento in pg.event.get():
+                  if evento.type == pg.QUIT:
+                       game_over = True
+        
+            self.pantalla_principal.blit(self.imagenFondo,(0, 0))
+            menu = self.fuenteMenu.render("Pulsa ENTER para jugar", 0, AZUL)
+            self.pantalla_principal.blit(menu, (155, ALTO//2))
+
+            pg.display.flip()
+
+        pg.quit()
+    

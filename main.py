@@ -1,3 +1,3 @@
 from pongapp.pantallas import *
-juego = Partida()
-juego.bucle_fotrograma()
+menu = Menu()
+menu.bucle_pantalla()
