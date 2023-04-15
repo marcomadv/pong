@@ -24,7 +24,7 @@ class Partida:
         self.game_over = False
 
 
-    def bucle_fotrograma(self):
+    def bucle_pantalla(self):
         game_over = False
 
         while not self.game_over:
@@ -89,22 +89,28 @@ class Partida:
               tiempo_juego= self.fuente.render(str(self.temporizador//1000),0,NARANJA)
          if self.temporizador <= 6000:
               tiempo_juego= self.fuente.render(str(self.temporizador//1000),0,ROJO)
-              
+
          self.pantalla_principal.blit(tiempo_juego, (380, 51))
     
     def fin_de_partida(self):
         if self.temporizador <= 0:
             self.game_over = True
+            if self.contadorDerecho > self.contadorIzquierdo:
+                return f"Gana el jugador 2, resultado jugador2: {self.contadorDerecho}, jugador1:{self.contadorIzquierdo}"
+            elif self.contadorDerecho < self.contadorIzquierdo:
+                 return f"Gana el jugador 1, resultado jugador1: {self.contadorIzquierdo}, jugador2:{self.contadorDerecho}"
+            else:
+                return "¡EMPATE!"
 
         # para que finalice el juego por puntos
-        if self.contadorDerecho == 7:
+        if self.contadorDerecho == 10:
             self.game_over = True
-            print("El gandor es el jugador 2")
+            return "Gana el jugador 1"
             
-        if self.contadorIzquierdo == 7:
+        if self.contadorIzquierdo == 10:
             self.game_over = True
-            print("El ganador es el jugador 1")
-
+            return "Gana el jugador 2"
+            
 class Menu:
     def __init__(self):
         self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
@@ -121,10 +127,78 @@ class Menu:
                        game_over = True
         
             self.pantalla_principal.blit(self.imagenFondo,(0, 0))
-            menu = self.fuenteMenu.render("Pulsa ENTER para jugar", 0, AZUL)
-            self.pantalla_principal.blit(menu, (155, ALTO//2))
+            jugar = self.fuenteMenu.render("Pulsa ENTER para jugar", 0, AZUL)
+            records = self.fuenteMenu.render("Pulsa ESPACE para puntos", 0, AZUL)
+
+            boton = pg.key.get_pressed()
+            if boton[pg.K_RETURN] == True:
+                return "partida"
+            if boton[pg.K_SPACE] == True:
+                return "records"
+
+            self.pantalla_principal.blit(jugar, (155, ALTO//2))
+            self.pantalla_principal.blit(records, (155, 350))
+
+
 
             pg.display.flip()
 
         pg.quit()
-    
+
+class Resultado:
+    def __init__(self, resultado_final):
+        pg.init()
+        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
+        pg.display.set_caption("RESULTADOS")
+        self.tasa_refresco = pg.time.Clock()
+        self.fuenteResultado = pg.font.Font(FUENTE, 10)
+        self.resultado_final = resultado_final
+          
+    def bucle_pantalla(self):
+        game_over = False
+        while not game_over:
+            for evento in pg.event.get():
+                if evento.type == pg.QUIT:
+                    game_over = True
+                
+
+            if evento.type == pg.KEYDOWN:
+               game_over = True 
+
+            self.pantalla_principal.fill(BLANCO)
+            resultado = self.fuenteResultado.render(self.resultado_final, 0, NARANJA)
+
+            self.pantalla_principal.blit(resultado, (130, ALTO//2))
+            
+
+            pg.display.flip()
+        
+        pg.quit()
+
+class Records:
+    def __init__(self):
+        pg.init()
+        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
+        pg.display.set_caption("RECORDS")
+        self.tasa_refresco = pg.time.Clock()
+        self.fuenteRecords = pg.font.Font(FUENTE, 15)
+
+    def bucle_pantalla(self):
+        game_over = False
+        while not game_over:
+            for evento in pg.event.get():
+                  if evento.type == pg.QUIT:
+                       game_over = True
+        
+            self.pantalla_principal.fill(BLANCO)
+            texto = self.fuenteRecords.render("Mejores puntuaciones", 0, AZUL)
+
+            if evento.type == pg.KEYDOWN:
+               game_over = True
+
+            self.pantalla_principal.blit(texto, (155, ALTO//2))
+
+
+            pg.display.flip()
+
+        pg.quit()
