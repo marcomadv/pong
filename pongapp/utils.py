@@ -14,3 +14,7 @@ FUENTE = "pongapp/fonts/PressStart2p.ttf"
 TIEMPO = 30000
 AZUL = (23, 221, 203)
 NARANJA = (255, 128, 0)
+FPS = 300
+IMG_FONDO = "pongapp/images/fondo.jpg"
+SONIDO_AMBIENTE = "pongapp/songs/sonido_ambiente.mp3"
+SONIDO_PELOTA = "pongapp/songs/sonido_pelota.mp3"

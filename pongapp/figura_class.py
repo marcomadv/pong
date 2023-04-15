@@ -46,6 +46,7 @@ class Pelota:
         self.radio = radio
         self.vx = vx
         self.vy = vy
+        self.sonido = pg.mixer.Sound(SONIDO_PELOTA)
 
 
 
@@ -94,6 +95,21 @@ class Pelota:
     @property
     def abajo(self):
         return self.pos_y + self.radio
+    
+    def comprobar_choque(self,r1,r2):
+        if self.derecha >= r2.izquierda and\
+            self.izquierda <= r2.derecha and\
+            self.abajo >= r2.arriba and\
+            self.arriba <= r2.abajo:
+                self.vx *= -1
+                pg.mixer.Sound.play(self.sonido)
+
+        if self.derecha >= r1.izquierda and\
+            self.izquierda <= r1.derecha and\
+            self.abajo >= r1.arriba and\
+            self.arriba <= r1.abajo:
+                self.vx *= -1
+                pg.mixer.Sound.play(self.sonido)   
 
     def comprobar_choqueV2(self, *raquetas):
         for r in raquetas:
@@ -102,4 +118,6 @@ class Pelota:
                self.abajo >= r.arriba and\
                self.arriba <= r.abajo:
                     self.vx *= -1
+ 
+
 
