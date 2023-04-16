@@ -1,5 +1,5 @@
 import pygame as pg
-from .utils import * 
+from .old_utils import * 
 
 class Raqueta:
     def __init__(self, pos_x, pos_y, w = 15, h = 100, color = BLANCO, vx = 1, vy = 1):

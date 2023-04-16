@@ -3,7 +3,6 @@ from pongapp.figura_class import Pelota, Raqueta
 from .utils import *
 
 class Partida:
-    pg.init()
     def __init__(self):
         self.pantalla_principal=pg.display.set_mode((ANCHO, ALTO))
         pg.display.set_caption("PONG")
@@ -27,7 +26,12 @@ class Partida:
 
 
     def bucle_pantalla(self):
-        while not self.game_over:
+        self.temporizador = TIEMPO
+        self.tasa_refresco.tick()
+        self.contadorDerecho = 0
+        self.contadorIzquierdo = 0
+
+        while not self.game_over and (self.contadorDerecho <10 or self.contadorIzquierdo< 10) and self.temporizador > 0:
 
             salto_tiempo = self.tasa_refresco.tick(FPS)
             self.fin_de_partida()
@@ -35,7 +39,7 @@ class Partida:
 
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
-                    return True
+                    return  True
 
             self.raqueta1.moverRaqueta(pg.K_w, pg.K_s)   
             self.raqueta2.moverRaqueta(pg.K_UP, pg.K_DOWN)
@@ -59,8 +63,6 @@ class Partida:
             pg.display.flip()
 
         return self.resultado_partida
-    
-        pg.quit()
 
     def mostrar_jugadores(self):
         jugador1 = self.fuente.render("Player 1",True ,COLOR_PLAYER)
@@ -96,6 +98,14 @@ class Partida:
          self.pantalla_principal.blit(tiempo_juego, (380, 51))
     
     def fin_de_partida(self):
+        if self.contadorDerecho > self.contadorIzquierdo:
+            self.resultado_partida = f"Gana el jugador 2, resultado jugador2: {self.contadorDerecho}, resultado jugador1:{self.contadorIzquierdo}"
+        elif self.contadorIzquierdo > self.contadorDerecho:
+            self.resultado_partida = f"Gana el jugador 1, resultado jugador1: {self.contadorIzquierdo}, resultado jugador2:{self.contadorDerecho}"
+        else:
+            self.resultado_partida = "¡¡EMPATE!!"
+
+        '''
         if self.temporizador <= 0:
             self.game_over = True
             if self.contadorDerecho > self.contadorIzquierdo:
@@ -113,6 +123,7 @@ class Partida:
         if self.contadorIzquierdo == 10:
             self.game_over = True
             self.resultado_partida = "Gana el jugador 2"
+        '''
             
 class Menu:
     def __init__(self):
@@ -127,22 +138,16 @@ class Menu:
         self.tasa_refresco.tick(FPS)
         game_over = False 
         pg.mixer.Sound.play(self.sonido) #iniciamos el sonido 
+
         while not game_over:
             for evento in pg.event.get():
                   if evento.type == pg.QUIT:
-                       pg.mixer.Sound.stop(self.sonido)
                        return True
                   
                   if evento.type == pg.KEYDOWN:
                     if evento.key == pg.K_RETURN:
-                        return True
-                  
-        
-            self.pantalla_principal.blit(self.imagenFondo,(0, 0))
-            jugar = self.fuenteMenu.render("Pulsa ENTER para jugar", 0, AZUL)
-            records = self.fuenteMenu.render("Pulsa ESPACE para puntos", 0, AZUL)
+                        game_over = True
 
-            boton = pg.key.get_pressed()
             '''
             if boton[pg.K_RETURN] == True:
                 game_over = True
@@ -153,48 +158,60 @@ class Menu:
                 pg.mixer.Sound.stop(self.sonido)
                 return "records"
             '''
-            self.pantalla_principal.blit(jugar, (155, ALTO//2))
-            self.pantalla_principal.blit(records, (155, 350))
+                  
+            self.pantalla_principal.blit(self.imagenFondo,(0, 0))
+            jugar = self.fuenteMenu.render("Pulsa ENTER para jugar", 0, AZUL)
+            records = self.fuenteMenu.render("Pulsa ESPACE para puntos", 0, AZUL)
+
         
 
+            self.pantalla_principal.blit(jugar, (155, ALTO//2))
+            self.pantalla_principal.blit(records, (155, 350))
+    
 
             pg.display.flip()
 
-        pg.quit()
+        pg.mixer.Sound.stop(self.sonido)
+
 
 class Resultado:
     def __init__(self):
-        pg.init()
         self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
         pg.display.set_caption("RESULTADOS")
         self.tasa_refresco = pg.time.Clock()
         self.fuenteResultado = pg.font.Font(FUENTE, 10)
         self.resultado_final = "" 
+    
           
     def bucle_pantalla(self):
         self.tasa_refresco.tick(FPS)
         game_over = False
+
         while not game_over:
             for evento in pg.event.get():
                 if evento.type == pg.QUIT:
                     return True
+                
+                if evento.type == pg.KEYDOWN:
+                    if evento.key == pg.K_RETURN:
+                        game_over = True
                 
             self.pantalla_principal.fill(BLANCO)
             resultado = self.fuenteResultado.render(self.resultado_final, 0, NARANJA)
 
             self.pantalla_principal.blit(resultado, (130, ALTO//2))
             
-
             pg.display.flip()
         
+  
+
     def cargarResultado(self, resultado):
         self.resultado_final = resultado
         
-        pg.quit()
+        return self.resultado_final
 
 class Records:
     def __init__(self):
-        pg.init()
         self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
         pg.display.set_caption("RECORDS")
         self.tasa_refresco = pg.time.Clock()
@@ -206,7 +223,11 @@ class Records:
         while not game_over:
             for evento in pg.event.get():
                   if evento.type == pg.QUIT:
-                       game_over = True
+                       return True
+                  
+                  if evento.type == pg.KEYDOWN:
+                    if evento.key == pg.K_RETURN:
+                        game_over = True
         
             self.pantalla_principal.fill(BLANCO)
             texto = self.fuenteRecords.render("Mejores puntuaciones", 0, AZUL)
@@ -216,4 +237,4 @@ class Records:
 
             pg.display.flip()
 
-        pg.quit()
+

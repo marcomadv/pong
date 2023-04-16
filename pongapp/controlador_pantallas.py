@@ -6,13 +6,19 @@ class PantallaControlador:
         self.partida = Partida()
         self.resultado = Resultado()
         self.records = Records()
-        self.resultado_final = "sadasdasdsf"
+        self.resultado_final = ""
 
     def start(self):
-        self.menu.bucle_pantalla()
-        self.resultado_final = self.partida.bucle_pantalla()
-        print(self.resultado_final)
-        self.resultado.cargarResultado(self.resultado_final)
-        self.resultado.bucle_pantalla()
-        
+        seguir = True
+        cerrar = ""
+        while seguir:
+            cerrar = self.menu.bucle_pantalla()
+            if cerrar == True:
+                break
+            
 
+            '''
+            self.resultado_final = self.partida.bucle_pantalla()
+            self.resultado.cargarResultado(self.resultado_final)
+            self.resultado.bucle_pantalla()
+            '''
