@@ -3,10 +3,9 @@ from pongapp.figura_class import Pelota, Raqueta
 from .utils import *
 
 class Partida:
-    def __init__(self):
-        self.pantalla_principal=pg.display.set_mode((ANCHO, ALTO))
-        pg.display.set_caption("PONG")
-        self.tasa_refresco=pg.time.Clock()
+    def __init__(self, pantalla, tasa_refresco):
+        self.pantalla_principal= pantalla
+        self.tasa_refresco = tasa_refresco
 
         self.pelota = Pelota(ANCHO//2, ALTO//2)
         self.raqueta1 = Raqueta(0, ALTO//2)
@@ -126,10 +125,10 @@ class Partida:
         '''
             
 class Menu:
-    def __init__(self):
-        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
-        pg.display.set_caption("MENU")
-        self.tasa_refresco = pg.time.Clock()
+    def __init__(self, pantalla, tasa_refresco):
+        self.pantalla_principal = pantalla
+        self.tasa_refresco = tasa_refresco
+
         self.imagenFondo = pg.image.load(IMG_FONDO)
         self.fuenteMenu = pg.font.Font(FUENTE, 25)
         self.sonido = pg.mixer.Sound(SONIDO_AMBIENTE)
@@ -175,10 +174,9 @@ class Menu:
 
 
 class Resultado:
-    def __init__(self):
-        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
-        pg.display.set_caption("RESULTADOS")
-        self.tasa_refresco = pg.time.Clock()
+    def __init__(self, pantalla, tasa_refresco):
+        self.pantalla_principal = pantalla
+        self.tasa_refresco = tasa_refresco
         self.fuenteResultado = pg.font.Font(FUENTE, 10)
         self.resultado_final = "" 
     
@@ -211,10 +209,9 @@ class Resultado:
         return self.resultado_final
 
 class Records:
-    def __init__(self):
-        self.pantalla_principal = pg.display.set_mode((ANCHO,ALTO))
-        pg.display.set_caption("RECORDS")
-        self.tasa_refresco = pg.time.Clock()
+    def __init__(self, pantalla, tasa_refresco):
+        self.pantalla_principal = pantalla
+        self.tasa_refresco = tasa_refresco
         self.fuenteRecords = pg.font.Font(FUENTE, 15)
 
     def bucle_pantalla(self):
