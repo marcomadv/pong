@@ -10,9 +10,39 @@ class Raqueta:
         self.color = color
         self.vx = vx
         self.vy = vy
+        self.file_imagenes = {
+            'drcha':['electric00_drcha.png','electric01_drcha.png','electric02_drcha.png'],
+            'izqda':['electric00_izqda.png','electric01_izqda.png','electric02_izqda.png']
+        }
+        self.imagenes = self.cargar_imagenes() #llamo al metodo que devuelve la inicialización de las imagenes
+        self._direccion = '' #variable para asignar dirección
+        self.imagen_activa = 0 #variable para indicar repetición
 
-    def dibujarRaqueta(self, pantalla):
-        pg.draw.rect(pantalla, self.color,(self.pos_x, self.pos_y, self.w, self.h))
+    def cargar_imagenes(self):
+        imagenprueba={}
+        for lado in self.file_imagenes:
+            imagenprueba[lado]=[]
+            for nombre_fichero in self.file_imagenes[lado]:
+                imagen = pg.image.load(f"pongapp/images/raquetas/{nombre_fichero}")
+                imagenprueba[lado].append(imagen)
+        return imagenprueba    
+
+    @property
+    def direccion(self):
+        return self._direccion
+    
+    @direccion.setter
+    def direccion(self,valor):
+        self._direccion = valor
+
+    def dibujar(self, pantalla):
+        pantalla.blit(self.imagenes[self.direccion][self.imagen_activa],(self.pos_x, self.pos_y, self.w, self.h))
+        self.imagen_activa +=1
+        if self.imagen_activa >= len(self.imagenes[self.direccion]):
+            self.imagen_activa = 0
+       #pantalla.blit(self.raqueta_derecha,(self.pos_x, self.pos_y, self.w, self.h))
+
+        #pg.draw.rect(pantalla, self.color,(self.pos_x, self.pos_y, self.w, self.h))
 
     def moverRaqueta(self, tecla_arriba, tecla_abajo, y_max = Y_MAX, y_min = Y_MIN):
         estado_teclado = pg.key.get_pressed()
